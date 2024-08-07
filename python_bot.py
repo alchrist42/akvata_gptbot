@@ -47,12 +47,18 @@ async def open_ai(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = update.message.text
-    completion = client_ai.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": text},
-        ],
-    )
+    try:
+        completion = client_ai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": text},
+            ],
+        )
+    except Exception as e:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id, text="Cant get chatGPT answer"
+        )
+        raise e
     answer_chatgpt = completion.choices[0].message
     await context.bot.send_message(
         chat_id=update.effective_chat.id, text=answer_chatgpt
