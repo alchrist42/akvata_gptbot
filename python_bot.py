@@ -13,9 +13,10 @@ from telegram.ext import (
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-logging.getLogger("httpx").setLevel(
-    logging.WARNING
-)  # for disabling not informative messages from httpx
+# disabling not informative messages from httpx
+# logging.getLogger("httpx").setLevel(
+#     logging.WARNING
+# )  
 
 
 TOKEN_BOT = os.environ.get("TGBOT_API_KEY")
@@ -61,7 +62,7 @@ async def open_ai(update: Update, context: ContextTypes.DEFAULT_TYPE):
         raise e
     answer_chatgpt = completion.choices[0].message
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=answer_chatgpt
+        chat_id=update.effective_chat.id, text=answer_chatgpt.content
     )
 
 
